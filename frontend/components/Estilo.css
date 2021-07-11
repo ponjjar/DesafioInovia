@@ -1,0 +1,43 @@
+.Plot {
+    border: 0.5pc transparent;
+    border-radius: 5px;
+  }
+
+  .fake-window .fake-window-top-row {
+    padding: 1rem;
+    background-color: #ecf0f1;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 0.4rem;
+    border-top-right-radius: 0.4rem;
+  }
+  .dark-mode .fake-window .fake-window-top-row {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .fake-button {
+    display: inline-block;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    margin-right: 0.5rem;
+  }
+  .fake-button:after {
+    content: "\200b";
+  }
+  .fake-content {
+    height: 1.4rem;
+    background-color: #ecf0f1;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    margin-bottom: 1rem;
+    border-radius: 0.2rem;
+  }
+  .dark-mode .fake-content {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.025);
+  }
+  .fake-content:after {
+    content: "\200b";
+  }
+  .fake-content:last-child {
+    margin-bottom: 0;
+  }
