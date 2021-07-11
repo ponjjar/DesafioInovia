@@ -7,6 +7,7 @@ import sqlite3 # SQLite3 para realizar consultas no banco de dados
 import random # randomização para gerar uma palheta de cor aleatória
 import pandas as pd # pandas para tratar e ler dados
 import uuid
+import os
 from flask import session, request
 import datetime
 from flask_session import Session
@@ -259,4 +260,5 @@ def _visitantes():
         session['tema'] = flask.request.form.get('tema')          
         session["visitas"] = 1                               
     return jsonify({"Data": str(session.get('data')), "Visitas" : format(int(session.get('visitas'))), "Tema":format(session.get('tema'))})  
-app.run(debug=True, port=9999)
+port = os.environ.get("PORT", 5000)
+app.run(debug=False, port="0.0.0.0" port=port)
