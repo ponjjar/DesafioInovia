@@ -1,6 +1,6 @@
 # DesafioInovia
 
-# Como executar
+## Como executar
 Por fins de praticidade, o banco de dados está incluso no repositório e as credenciais de acesso são `Caique` com senha `123`. Em uma página de produção, com certeza o banco não seria disponibilizado :P
 
 Para instalar as dependências do node, vá na pasta `frontend` e rode `npm i`.
