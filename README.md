@@ -1,4 +1,4 @@
-# DesafioInovia
+# Desafio Inovia
 ### Introdução
 
 O site é programado em **_react.js, javascript, html, css, python e flask**. Nele é possível fazer login e cadastrar, além de visualizar gráficos e dashboards gerados a partir de uma tabela em xlsx.
