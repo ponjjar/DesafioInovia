@@ -1,6 +1,9 @@
 # DesafioInovia
+### Introdução
 
-# Como executar
+O site é programado em **_react.js, javascript, html, css, python e flask**. Nele é possível fazer login e cadastrar, além de visualizar gráficos e dashboards gerados a partir de uma tabela em xlsx.
+
+## Como executar
 Por fins de praticidade, o banco de dados está incluso no repositório e as credenciais de acesso são `Caique` com senha `123`. Em uma página de produção, com certeza o banco não seria disponibilizado :P
 
 Para instalar as dependências do node, vá na pasta `frontend` e rode `npm i`.
