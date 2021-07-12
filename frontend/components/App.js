@@ -20,7 +20,7 @@ export default function App(props) {
     const [login, setLogin] = useState([""]);
     const [auth, setAuth] = useState(false);
     const [msgErro, setErro] = useState("");
-    const [Controle, setControle] = useState(false);
+    const [botao, setBotao] = useState("");
 
     // constantes de loading e cookies.
     const [Carregando, setCarregando] = useState(0);
@@ -41,7 +41,6 @@ export default function App(props) {
         let dados = new FormData();
         dados.append("username", nome);
         dados.append("password", password);
-        setControle(true);
         setCookies(1);
         /*Envia dados do login*/
         fetch("https://desafioinovia.gq:9999/login", {
@@ -58,10 +57,10 @@ export default function App(props) {
             setLogin(j);
             if (j.autenticado == true) {
                 localStorage.setItem("auth", "true");
-                setControle(false);
                 setAuth(true);
             } else if (j.autenticado == false) {
                 if (j.erro != null) {
+
                     setErro(
                         <>
                             <div
@@ -74,9 +73,7 @@ export default function App(props) {
                             <br />
                         </>
                     );
-                    setControle(false);
                 } else {
-                    setControle(false);
                 }
             }
         })
@@ -90,7 +87,6 @@ export default function App(props) {
                     <br />
                 </>
             );
-            setControle(false);
         });
     }
     /*Verifica o tema que está usando armazenado no cache*/
@@ -100,7 +96,7 @@ export default function App(props) {
     }
     /*Valida o formulário > 0 para enviar*/
     function validateForm() {
-        return nome.length > 0 && password.length > 0 && Controle == false;
+        return nome.length > 0 && password.length > 0;
     }
     /*Sai do perfil do usuário e limpa os caches.*/
     function logout() {
@@ -115,9 +111,11 @@ export default function App(props) {
             },
         })
         .then((r) => r.json())
-        .then((j) => {});
+        .then((j) => {
+            setLogin(j);
+            setCarregando(0);
+        });
 
-        setControle(true);
     }
 
     /*Faz o login e registra novo usuário*/
@@ -126,10 +124,7 @@ export default function App(props) {
         event.preventDefault();
         dados.append("username", nome);
         dados.append("password", password);
-        let tipoBotao =
-            event.nativeEvent.submitter.attributes.getNamedItem(
-                "tipobotao"
-            ).value;
+        let tipoBotao = botao;
         /*Caso o botão seja de login:*/
         if (tipoBotao == "login") {
             Logar();
@@ -141,7 +136,7 @@ export default function App(props) {
                 method: "POST",
                 body: dados,
                 headers: {
-                    "Access-Control-Allow-Origin": "http://localhost:1234/",
+                    "Access-Control-Allow-Origin": "*",
                     "Access-Control-Allow-Credentials": "true",
                 },
             })
@@ -161,7 +156,6 @@ export default function App(props) {
                             <br />
                         </>
                     );
-                    setControle(false);
                 } else {
                     setErro(
                         <>
@@ -175,14 +169,13 @@ export default function App(props) {
                             <br />
                         </>
                     );
-                    setControle(false);
                 }
             });
         }
     }
 
     /*Caso login seja aprovado*/
-    if (auth == false) {
+    if (auth == false && Carregando == 0) {
         return (
             <div className="container">
                 <div className="card">
@@ -242,7 +235,7 @@ export default function App(props) {
                                 type="submit"
                                 tipobotao="login"
                                 disabled={!validateForm()}
-                                //onClick={() => setControle(true)}
+                                onClick={() => setBotao("login")}
                             >
                                 Login
                             </Button>
@@ -253,7 +246,7 @@ export default function App(props) {
                                 tipobotao="registro"
                                 type="submit"
                                 disabled={!validateForm()}
-                                //onClick={() => setControle(true)}
+                                onClick={() => setBotao("registrar")}
                             >
                                 Cadastrar
                             </Button>
@@ -460,24 +453,22 @@ export default function App(props) {
         } else if (Carregando == 6) {
             //Informações de dados pessoais para carregar (6)
             let x = 0;
-            let aux = [];
-            let y = 0;
+            let aux = ["Claro", "Escuro"];
+            let y = 1;
             let i = 0;
             dadosPrivacidade["Nomes"] = [];
             dadosPrivacidade["Quantidade"] = [];
             for (i = 0; i < dadosPrivacidade["Tema"].split(",").length; i++) {
+                
                 if (
-                    aux.includes(dadosPrivacidade["Tema"].split(",")[i + 1]) &&
-                    dadosPrivacidade["Tema"].split(",")[i + 1] != undefined
+                    dadosPrivacidade["Tema"].split(",")[i+1] == aux[0]
                 ) {
-                    y++;
+                    dadosPrivacidade["Nomes"][i] =dadosPrivacidade["Tema"].split(",")[i];
+                    dadosPrivacidade["Quantidade"][i] = y;
                 } else {
-                    dadosPrivacidade["Nomes"][x] =
-                        dadosPrivacidade["Tema"].split(",")[i];
-                    dadosPrivacidade["Quantidade"][x] = y;
-                    y++;
-                    x++;
-                    aux.push(dadosPrivacidade["Tema"].split(",")[i]);
+
+                    dadosPrivacidade["Nomes"][i] =dadosPrivacidade["Tema"].split(",")[i];
+                    dadosPrivacidade["Quantidade"][i] = y;
                 }
             }
 
@@ -761,7 +752,7 @@ export default function App(props) {
                                     : "black",
                         },
                     },
-                    title: "Temas mais utilizados em relação ao acesso",
+                    title: "Temas preferidos",
                     plot_bgcolor:
                         localStorage.getItem("temaEscuro") == "true"
                             ? "black"
@@ -778,13 +769,6 @@ export default function App(props) {
                             localStorage.getItem("temaEscuro") == "true"
                                 ? "white"
                                 : "black",
-                    },
-                    margin: {
-                        r: 20,
-                        t: 70,
-                        b: 20,
-                        l: 20,
-                        pad: 0,
                     },
                     annotations: [
                         {
@@ -812,7 +796,10 @@ export default function App(props) {
                                 <h2 className="cardtitle">
                                     Olá, {login.usuario}
                                 </h2>
-                                <a href="" onClick={logout}>
+                                <a href="" onClick={() =>{
+                                        setCarregando(20);
+                                        logout();
+                                        }}>
                                     Sair da conta
                                 </a>
                             </center>
@@ -1037,7 +1024,10 @@ export default function App(props) {
                             <h2 className="cardtitle">
                                 Bem vindo, {login.usuario}
                             </h2>
-                            <a href="" onClick={logout}>
+                            <a href="" onClick={() =>{
+                                        setCarregando(20);
+                                        logout();
+                                        }}>
                                 Sair da conta
                             </a>
                         </center>
